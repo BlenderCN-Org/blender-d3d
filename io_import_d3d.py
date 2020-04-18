@@ -1,4 +1,13 @@
-
+bl_info = {
+    "name": "Import D3D",
+    "description": "Importer for GameMaker's legacy D3D model format",
+    "author": "Bart Teunis",
+    "version": (0, 0, 6),
+    "blender": (2, 79, 0),
+    "location": "File > Import",
+    "warning": "", # used for warning icon and text in addons panel
+    "wiki_url": "https://github.com/bartteunis/blender-d3d/wiki",
+    "category": "Import-Export"}
 
 import bpy, bmesh
 from mathutils import *
@@ -11,7 +20,7 @@ from bpy.types import Operator
 
 
 class ImportD3D(Operator, ImportHelper):
-    """Import legacy D3D/GMMOD model format of GameMaker"""
+    """Import legacy D3D model format of GameMaker"""
     bl_idname = "import_mesh.d3d"  # important since its how bpy.ops.import_mesh.d3d is constructed
     bl_label = "Import D3D"
 
@@ -43,8 +52,10 @@ class ImportD3D(Operator, ImportHelper):
         
         mat_identity = Matrix()
         if self.import_as_separate_objects:
+            # Add a new object of type 'MESH' for each primitive in the file
             pass
         else:
+            # Add all primitives to a single new mesh (default)
             bpy.ops.object.add(type='MESH')
             obj = bpy.context.object
             mesh = obj.data
@@ -60,6 +71,7 @@ class ImportD3D(Operator, ImportHelper):
                 # https://docs.blender.org/api/current/bmesh.ops.html
                 if   type ==  0:
                     # d3d_model_primitive_begin
+                    # TODO only support pr_trianglelist for now
                     pass
                 elif type ==  1:
                     # d3d_model_primitive_end
